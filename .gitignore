@@ -34,3 +34,4 @@ logs/
 
 # macOS
 .DS_Store
+Thumbs.db
