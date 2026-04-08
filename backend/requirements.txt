@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+python-dotenv
+bcrypt
+pyjwt
+scikit-learn
+numpy
+pandas
+requests
+email-validator
