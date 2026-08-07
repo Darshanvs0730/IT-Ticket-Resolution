@@ -118,7 +118,7 @@ def render():
                 font=dict(color='#111827'), 
                 title_font=dict(size=18, family="Montserrat", color='#111827'),
                 margin=dict(l=20, r=20, t=50, b=20),
-                legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1, title=None)
+                legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5, title=None)
             )
             fig2.update_xaxes(title_text="", showgrid=False, linecolor="#E5E7EB", tickfont=dict(color='#111827'))
             fig2.update_yaxes(title_text="", showgrid=True, gridcolor="#E5E7EB", zeroline=False, dtick=1, tickfont=dict(color='#111827'))
