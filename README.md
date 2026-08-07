@@ -6,9 +6,13 @@
   <img src="assets/divider-animation.svg" alt="divider" width="100%">
 </p>
 
-<h3 align="center">
-  🌐 <b>Live Demo:</b> <a href="https://dvs-it-ticket-res.streamlit.app/">https://dvs-it-ticket-res.streamlit.app/</a>
-</h3>
+## 🌐 Live Application
+
+<div align="center">
+  <h3>
+    <a href="https://dvs-it-ticket-res.streamlit.app/">👉 Access the Live IT Ticket Engine Here 👈</a>
+  </h3>
+</div>
 
 ## 📖 Project Status
 
