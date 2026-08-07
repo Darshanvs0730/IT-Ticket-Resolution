@@ -93,31 +93,31 @@ def render():
     if not df.empty:
         cc1, cc2 = st.columns(2)
         with cc1:
+            st.markdown("<h5 style='text-align: center; color: #111827; padding-bottom: 10px;'>Tickets by Category</h5>", unsafe_allow_html=True)
             cat_df = df.groupby('category').size().reset_index(name='count')
-            fig1 = px.pie(cat_df, names="category", values="count", title="Tickets by Category", hole=0.4, color_discrete_sequence=px.colors.qualitative.Pastel)
+            fig1 = px.pie(cat_df, names="category", values="count", hole=0.4, color_discrete_sequence=px.colors.qualitative.Pastel)
             fig1.update_traces(textposition='inside', textinfo='percent+label')
             fig1.update_layout(
                 plot_bgcolor='#FFFFFF', 
                 paper_bgcolor='#FFFFFF', 
-                font=dict(color='#111827'), 
-                title_font=dict(size=18, family="Montserrat", color='#111827'),
-                margin=dict(l=20, r=20, t=50, b=20),
+                font=dict(color='#111827'),
+                margin=dict(l=20, r=20, t=20, b=20),
                 showlegend=False
             )
             st.plotly_chart(fig1, use_container_width=True, theme=None)
             
         with cc2:
+            st.markdown("<h5 style='text-align: center; color: #111827; padding-bottom: 10px;'>Tickets by Status Over Time</h5>", unsafe_allow_html=True)
             status_time = df.copy()
             status_time["date"] = pd.to_datetime(status_time["created_at"]).dt.date
             status_grouped = status_time.groupby(["date", "status"]).size().reset_index(name="count")
             
-            fig2 = px.bar(status_grouped, x="date", y="count", color="status", title="Tickets by Status Over Time", barmode="group", color_discrete_sequence=px.colors.qualitative.Set2)
+            fig2 = px.bar(status_grouped, x="date", y="count", color="status", barmode="group", color_discrete_sequence=px.colors.qualitative.Set2)
             fig2.update_layout(
                 plot_bgcolor='#FFFFFF', 
                 paper_bgcolor='#FFFFFF', 
                 font=dict(color='#111827'), 
-                title_font=dict(size=18, family="Montserrat", color='#111827'),
-                margin=dict(l=20, r=20, t=50, b=20),
+                margin=dict(l=20, r=20, t=20, b=20),
                 legend=dict(orientation="h", yanchor="top", y=-0.15, xanchor="center", x=0.5, title=None)
             )
             fig2.update_xaxes(title_text="", showgrid=False, linecolor="#E5E7EB", tickfont=dict(color='#111827'))
