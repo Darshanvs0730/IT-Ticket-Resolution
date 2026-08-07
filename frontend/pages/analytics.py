@@ -18,6 +18,13 @@ def render():
     st.markdown("### Support Performance")
     
     total = len(df)
+    
+    if "resolution_time" not in df.columns:
+        if "resolved_at" in df.columns and "created_at" in df.columns:
+            df["resolution_time"] = (pd.to_datetime(df["resolved_at"]) - pd.to_datetime(df["created_at"])).dt.total_seconds() / 3600
+        else:
+            df["resolution_time"] = float("nan")
+
     res_times = pd.to_numeric(df["resolution_time"].replace("", float("nan")), errors="coerce")
     avg_time = res_times.mean() if not res_times.empty else 0.0
     avg_time = 0.0 if pd.isna(avg_time) else avg_time

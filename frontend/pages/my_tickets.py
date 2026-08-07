@@ -45,13 +45,27 @@ def render():
     
     st.markdown("<br>", unsafe_allow_html=True)
     
-    # We will show the raw dataframe with Streamlit native to allow selection / native interaction
-    display_df = filtered_df[["id", "title", "category", "priority", "status", "created_at"]].copy()
+    display_df = filtered_df[["ticket_id", "title", "category", "priority", "status", "created_at"]].copy()
+    
+    # Format created_at to be readable
+    if "created_at" in display_df.columns:
+        display_df["created_at"] = pd.to_datetime(display_df["created_at"]).dt.strftime('%b %d, %Y %I:%M %p')
+    
+    def format_tkt_id(uid: str):
+        return f"TKT-{str(uid)[:8].upper()}" if len(str(uid)) > 8 else str(uid)
+        
+    display_df["ticket_id"] = display_df["ticket_id"].apply(format_tkt_id)
 
     # Create a nice layout to allow clicking a row and routing to its details
     st.dataframe(display_df, use_container_width=True, hide_index=True)
 
-    tkt_input_id = st.text_input("Enter Ticket ID to View Details (e.g. TKT-1234)", key="tkt_view_input")
+    tkt_input_id = st.text_input("Enter Ticket ID to View Details (e.g. TKT-F172DDCB)", key="tkt_view_input")
     if st.button("View Ticket Detail"):
         if tkt_input_id:
-            route_to_ticket(tkt_input_id)
+            input_upper = tkt_input_id.strip().upper()
+            matched_row = filtered_df[filtered_df["ticket_id"].apply(format_tkt_id) == input_upper]
+            if not matched_row.empty:
+                real_id = matched_row.iloc[0]["ticket_id"]
+                route_to_ticket(real_id)
+            else:
+                route_to_ticket(tkt_input_id)

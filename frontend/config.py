@@ -27,3 +27,4 @@ PAGE_NAMES = [
     "Historical Tickets",
     "Analytics"
 ]
+ADMIN_USERS = ["admin"]

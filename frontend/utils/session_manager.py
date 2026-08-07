@@ -24,10 +24,20 @@ def clear_session():
     """Clear all session state (sign out)"""
     for key in list(st.session_state.keys()):
         del st.session_state[key]
+    st.query_params.clear()
     init_session_state()
 
 def check_query_params():
     params = st.query_params
+    
+    if "token" in params and "user" in params:
+        if "access_token" not in st.session_state or not st.session_state["access_token"]:
+            st.session_state["access_token"] = params["token"]
+            st.session_state["username"] = params["user"]
+            st.session_state["user_id"] = 1
+            if "role" in params:
+                st.session_state["role"] = params["role"]
+                
     if "page" in params:
         st.session_state["current_page"] = params["page"]
     elif "current_page" not in st.session_state:

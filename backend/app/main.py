@@ -201,18 +201,7 @@ async def suggest_resolutions(ticket_id: str, current_user: models.User = Depend
 
     # Generate resolutions via LLM
     try:
-        from .utils.error_handler import LLMEngineError
-        if os.getenv("GROQ_API_KEY", "gsk_your_api_key_here") == "gsk_your_api_key_here":
-            logger.warning("Using fallback Groq API key (not functional). Substituting mock resolutions.")
-            resolutions = [
-                "Restart the device to clear memory and reload drivers.",
-                "Check for system or software updates and install them.",
-                "Verify network connection and reset the router if necessary.",
-                "Clear application cache or browser history.",
-                "Contact higher tier IT support if the problem persists."
-            ]
-        else:
-            resolutions = llm_engine.generate_resolutions(db_ticket.description, similar_tickets)
+        resolutions = await llm_engine.generate_resolutions(db_ticket.description, similar_tickets)
     except Exception as e:
         logger.error(f"LLM generation failed: {str(e)}")
         if similar_tickets:

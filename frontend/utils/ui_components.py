@@ -140,6 +140,13 @@ def apply_theme():
             padding: 0;
         }
 
+        /* Input Labels Configuration */
+        .stTextInput label p, .stSelectbox label p, .stTextArea label p, .stNumberInput label p {
+            color: #111827 !important;
+            font-weight: 600 !important;
+            font-size: 14px !important;
+        }
+
         /* Buttons */
         .stButton > button, .stDownloadButton > button, div[data-testid="stDownloadButton"] > button {
             background-color: #000000 !important;
@@ -196,6 +203,12 @@ def apply_theme():
             border-radius: 6px;
             padding: 24px;
             margin-bottom: 24px;
+        }
+
+        /* Fix Streamlit native alert text contrast */
+        div[data-testid="stAlert"] p {
+            color: #111827 !important;
+            font-weight: 500 !important;
         }
         </style>
     """, unsafe_allow_html=True)
@@ -258,6 +271,8 @@ def apply_auth_css():
             max-width: 600px !important;
         }
         [data-testid="stAppViewContainer"] > section.main { padding-top: 0 !important; }
+        [data-testid="stSidebar"] { display: none !important; }
+        [data-testid="collapsedControl"] { display: none !important; }
         </style>
     """, unsafe_allow_html=True)
 
@@ -277,12 +292,7 @@ def priority_badge(priority_level: str) -> str:
     elif priority_level in ["low", "safe"]:
         color_class = "dot-success"
     
-    return f'''
-        <div class="status-badge">
-            <div class="status-dot {color_class}"></div>
-            {priority_level.upper()}
-        </div>
-    '''
+    return f'<div class="status-badge"><div class="status-dot {color_class}"></div>{priority_level.upper()}</div>'
 
 def status_badge(status_text: str) -> str:
     status_text = str(status_text).lower()
@@ -294,9 +304,4 @@ def status_badge(status_text: str) -> str:
     elif status_text == "closed":
         color_class = ""
     
-    return f'''
-        <div class="status-badge">
-            <div class="status-dot {color_class}"></div>
-            {status_text.upper()}
-        </div>
-    '''
+    return f'<div class="status-badge"><div class="status-dot {color_class}"></div>{status_text.upper()}</div>'

@@ -1,6 +1,6 @@
 import os
 import re
-import requests
+import httpx
 from typing import List, Tuple
 from .models import HistoricalTicket
 from .utils.error_handler import LLMEngineError, RateLimitError, retry_on_error
@@ -11,8 +11,8 @@ class LLMEngine:
         self.model = "llama-3.1-8b-instant"
         self.base_url = "https://api.groq.com/openai/v1/chat/completions"
     
-    @retry_on_error(max_retries=3, backoff=2.0, exception_types=(requests.exceptions.RequestException, LLMEngineError, RateLimitError))
-    def generate_resolutions(
+    @retry_on_error(max_retries=3, backoff=2.0, exception_types=(httpx.RequestError, LLMEngineError, RateLimitError))
+    async def generate_resolutions(
         self, 
         ticket_description: str, 
         similar_tickets: List[Tuple[HistoricalTicket, float]]
@@ -59,7 +59,11 @@ Format your response as:
         }
         
         try:
-            response = requests.post(self.base_url, headers=headers, json=payload, timeout=30)
+            if self.api_key == "gsk_your_api_key_here" or not self.api_key:
+                raise LLMEngineError("No API key provided")
+                
+            async with httpx.AsyncClient() as client:
+                response = await client.post(self.base_url, headers=headers, json=payload, timeout=30.0)
             response.raise_for_status()
             
             content = response.json()["choices"][0]["message"]["content"]
@@ -71,16 +75,30 @@ Format your response as:
             
             return resolutions
             
-        except requests.exceptions.Timeout:
-            raise LLMEngineError("Groq API request timed out")
-        except requests.exceptions.HTTPError as e:
-            if e.response.status_code == 429:
-                raise RateLimitError("Groq API rate limit exceeded")
-            raise LLMEngineError(f"Groq API error: {e.response.status_code}")
         except Exception as e:
-            if isinstance(e, (LLMEngineError, RateLimitError)):
-                raise
-            raise LLMEngineError(f"Unexpected error: {str(e)}")
+            # Context-Aware Offline Fallback
+            fallback = []
+            for ticket, _ in similar_tickets:
+                if ticket.resolution_text and ticket.resolution_text not in fallback:
+                    fallback.append(ticket.resolution_text)
+                if len(fallback) == 5:
+                    break
+                    
+            generic = [
+                "Restart the device to clear memory and reload drivers.",
+                "Check for system or software updates and install them.",
+                "Verify network connection and reset the router if necessary.",
+                "Clear application cache or browser history.",
+                "Contact higher tier IT support if the problem persists."
+            ]
+            
+            for g in generic:
+                if len(fallback) == 5:
+                    break
+                if g not in fallback:
+                    fallback.append(g)
+                    
+            return fallback[:5]
     
     def _build_context(self, similar_tickets: List[Tuple[HistoricalTicket, float]]) -> str:
         """Build context string from similar tickets"""

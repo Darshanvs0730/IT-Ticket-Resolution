@@ -9,7 +9,7 @@ from utils.session_manager import clear_session
 # Simple Mock Data 
 MOCK_TICKETS = [
     {
-        "id": f"TKT-{random.randint(1000, 9999)}",
+        "ticket_id": f"TKT-{random.randint(1000, 9999)}",
         "title": "Cannot access VPN from home",
         "category": "Network",
         "priority": "High",
@@ -20,7 +20,7 @@ MOCK_TICKETS = [
         "description": "I get an error 809 when trying to establish the VPN connection. Internet works fine otherwise."
     },
     {
-        "id": f"TKT-{random.randint(1000, 9999)}",
+        "ticket_id": f"TKT-{random.randint(1000, 9999)}",
         "title": "Laptop battery draining fast",
         "category": "Hardware",
         "priority": "Medium",
@@ -31,7 +31,7 @@ MOCK_TICKETS = [
         "description": "My laptop dies within 1 hour of being unplugged."
     },
     {
-        "id": f"TKT-{random.randint(1000, 9999)}",
+        "ticket_id": f"TKT-{random.randint(1000, 9999)}",
         "title": "Request for Adobe Acrobat Pro",
         "category": "Software",
         "priority": "Low",
@@ -42,7 +42,7 @@ MOCK_TICKETS = [
         "description": "I need Adobe Acrobat Pro to edit some contract PDFs."
     },
     {
-        "id": f"TKT-{random.randint(1000, 9999)}",
+        "ticket_id": f"TKT-{random.randint(1000, 9999)}",
         "title": "Outlook not syncing",
         "category": "Software",
         "priority": "Medium",
@@ -53,7 +53,7 @@ MOCK_TICKETS = [
         "description": "It says disconnected at the bottom."
     },
     {
-        "id": f"TKT-{random.randint(1000, 9999)}",
+        "ticket_id": f"TKT-{random.randint(1000, 9999)}",
         "title": "Reset password for Workday",
         "category": "Access",
         "priority": "Critical",
@@ -102,7 +102,10 @@ class APIClient:
             return response.json()
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
+                if "signin" in response.url or "signup" in response.url:
+                    return None
                 # Token expired — clear session and redirect to sign in
+                from utils.session_manager import clear_session
                 clear_session()
                 st.error("Session expired. Please sign in again.")
                 st.rerun()
@@ -111,8 +114,11 @@ class APIClient:
             elif e.response.status_code == 404:
                 st.error("Resource not found.")
             else:
-                error_data = e.response.json() if e.response.content else {}
-                st.error(f"Error: {error_data.get('detail', 'Unknown error')}")
+                try:
+                    error_data = e.response.json() if e.response.content else {}
+                    st.error(f"Error: {error_data.get('detail', 'Unknown error')}")
+                except Exception:
+                    st.error(f"HTTP Error {e.response.status_code}")
             return None
         except requests.exceptions.ConnectionError:
             st.error(f"Cannot connect to backend at {self.base_url}. Is the server running?")
@@ -149,7 +155,7 @@ class APIClient:
     def create_ticket(self, title, description, category=None, priority="Medium"):
         if self.is_mock:
             new_ticket = {
-                "id": f"TKT-{random.randint(1000, 9999)}", "title": title, "category": category or "Other", "priority": priority,
+                "ticket_id": f"TKT-{random.randint(1000, 9999)}", "title": title, "category": category or "Other", "priority": priority,
                 "status": "Open", "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"), "updated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                 "resolution_time": "", "description": description
             }
@@ -177,7 +183,7 @@ class APIClient:
 
     def get_ticket(self, ticket_id):
         if self.is_mock:
-            tkt = next((t for t in MOCK_TICKETS if t["id"] == ticket_id), None)
+            tkt = next((t for t in MOCK_TICKETS if t["ticket_id"] == ticket_id), None)
             if tkt:
                 return tkt
             else:
@@ -222,7 +228,7 @@ class APIClient:
     def update_ticket(self, ticket_id, status=None, priority=None, category=None):
         if self.is_mock:
             for t in MOCK_TICKETS:
-                if t["id"] == ticket_id:
+                if t["ticket_id"] == ticket_id:
                     if status: t["status"] = status
                     if priority: t["priority"] = priority
                     if category: t["category"] = category
@@ -242,7 +248,7 @@ class APIClient:
     def delete_ticket(self, ticket_id):
         if self.is_mock:
             global MOCK_TICKETS
-            MOCK_TICKETS = [t for t in MOCK_TICKETS if t["id"] != ticket_id]
+            MOCK_TICKETS = [t for t in MOCK_TICKETS if t["ticket_id"] != ticket_id]
             return {"success": True}
         try:
             response = requests.delete(f"{self.base_url}/tickets/{ticket_id}", headers=self._get_headers(), timeout=self.timeout)

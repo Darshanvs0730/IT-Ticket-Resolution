@@ -8,7 +8,7 @@ def render_signin():
     apply_auth_css()
     _, col, _ = st.columns([1, 1.2, 1])
     with col:
-        st.markdown("<div style='text-align: center; margin-bottom: 20px;'><h1 class='brand-font'>ITTICKET</h1><p class='tech-label'>Support Portal</p></div>", unsafe_allow_html=True)
+        st.markdown("<div style='text-align: center; margin-bottom: 20px;'><h1 class='brand-font'>IT TICKET</h1><p class='tech-label'>Support Portal</p></div>", unsafe_allow_html=True)
         with st.container(border=True):
             st.markdown("### Sign In")
             
@@ -34,6 +34,11 @@ def render_signin():
                                     st.session_state["access_token"] = result.get("access_token", "mock")
                                     st.session_state["role"] = role
                                     st.session_state["current_page"] = "Historical Tickets" if role == "Admin" else "Dashboard"
+                                    
+                                    st.query_params["token"] = result.get("access_token", "mock")
+                                    st.query_params["user"] = result.get("username", username)
+                                    st.query_params["role"] = role
+                                    
                                     st.rerun()
                             else:
                                 st.error("Incorrect username or password.")
@@ -48,11 +53,10 @@ def render_signup():
     apply_auth_css()
     _, col, _ = st.columns([1, 1.2, 1])
     with col:
-        st.markdown("<div style='text-align: center; margin-bottom: 20px;'><h1 class='brand-font'>ITTICKET</h1><p class='tech-label'>Support Portal</p></div>", unsafe_allow_html=True)
+        st.markdown("<div style='text-align: center; margin-bottom: 20px;'><h1 class='brand-font'>IT TICKET</h1><p class='tech-label'>Support Portal</p></div>", unsafe_allow_html=True)
         with st.container(border=True):
             st.markdown("### Sign Up")
             
-            role = st.selectbox("Register as:", ["User", "Admin"])
             username = st.text_input("Username", key="su_user", placeholder="Choose username")
             email = st.text_input("Email", key="su_email", placeholder="Enter email")
             password = st.text_input("Password", type="password", key="su_pass", placeholder="Choose password")

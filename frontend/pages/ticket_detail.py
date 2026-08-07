@@ -12,14 +12,16 @@ def render():
         return
 
     api = APIClient()
-    tkt = api.get_ticket(tkt_id)
+    response_data = api.get_ticket(tkt_id)
+    tkt = response_data.get("ticket") if isinstance(response_data, dict) and "ticket" in response_data else response_data
 
     if not tkt:
         st.error(f"Ticket {tkt_id} could not be loaded.")
         if st.button("Back to Dashboard"): navigate_to("Dashboard")
         return
 
-    section_header(f"Ticket Details: {tkt_id}")
+    display_id = str(tkt_id)[:8].upper() if len(str(tkt_id)) > 8 else str(tkt_id)
+    section_header(f"Ticket Details: {display_id}")
     st.button("← Back to My Tickets", on_click=navigate_to, args=("My Tickets",))
     st.divider()
 
@@ -33,19 +35,25 @@ def render():
             with st.spinner("Analyzing historical tickets and synthesizing solution..."):
                 sugg_res = api.suggest_resolutions(tkt_id)
                 if sugg_res:
-                    st.success(f"Suggestions generated in {sugg_res.get('time_ms', 0)}ms!")
-                    st.session_state[f"sugg_{tkt_id}"] = sugg_res.get("suggestions", [])
+                    time_ms = sugg_res.get("processing_time_ms") or sugg_res.get("time_ms", 0)
+                    st.success(f"Suggestions generated in {time_ms}ms!")
+                    suggestions_data = sugg_res.get("resolutions") or sugg_res.get("suggestions", [])
+                    st.session_state[f"sugg_{tkt_id}"] = suggestions_data
 
         suggestions = st.session_state.get(f"sugg_{tkt_id}")
         if suggestions:
             for s in suggestions:
+                step = s.get("order") or s.get("step")
+                text = s.get("suggestion_text") or s.get("text")
+                helpful = s.get("was_helpful") if "was_helpful" in s else s.get("helpful")
+                
                 with st.container(border=True):
                     sc1, sc2 = st.columns([5, 1])
                     with sc1:
-                        st.markdown(f"**Step {s['step']}:** {s['text']}")
+                        st.markdown(f"**Step {step}:** {text}")
                     with sc2:
                         # Feedback simulation
-                        fb_state = s.get('helpful')
+                        fb_state = helpful
                         bg = "#FFFFFF"
                         if fb_state is True: bg = "#D1FAE5"
                         elif fb_state is False: bg = "#FEE2E2"

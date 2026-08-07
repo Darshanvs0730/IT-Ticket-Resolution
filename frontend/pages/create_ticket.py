@@ -31,7 +31,7 @@ def render():
                         if tkt:
                             show_success("Ticket created successfully!")
                             st.session_state["recent_ticket_created"] = True
-                            route_to_ticket(tkt.get("id"))
+                            route_to_ticket(tkt.get("ticket_id"))
         with c4:
             if st.button("Cancel", use_container_width=True):
                 navigate_to("Dashboard")
