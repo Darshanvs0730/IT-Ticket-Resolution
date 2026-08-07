@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150">
     <style>
-        .title { font: bold 56px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #007acc; }
+        .title { font: bold 52px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #007acc; }
         .subtitle { font: 24px -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; fill: #666; animation: fade 2s infinite alternate; }
         @keyframes fade {
             from { opacity: 0.3; }
@@ -14,6 +14,6 @@
     <rect width="100%" height="100%" fill="#f8f9fa" rx="15" />
     <circle cx="70" cy="75" r="12" fill="#28a745" />
     <circle cx="70" cy="75" r="12" class="pulse" />
-    <text x="110" y="85" class="title">ClinicaLake</text>
-    <text x="110" y="125" class="subtitle">Next-Gen Medallion Clinical Data Engine</text>
+    <text x="110" y="85" class="title">IT Ticket Resolution Engine</text>
+    <text x="110" y="125" class="subtitle">AI-Powered Resolution Pipeline</text>
 </svg>

@@ -22,26 +22,26 @@
     
     <!-- Boxes -->
     <rect x="50" y="50" width="160" height="100" class="box box-raw" />
-    <text x="130" y="100" class="text">RAW (CSV)</text>
-    <text x="130" y="125" class="subtext">EHR, Vitals, Labs</text>
+    <text x="130" y="100" class="text">RAW TICKET</text>
+    <text x="130" y="125" class="subtext">User Input</text>
     
     <path d="M 210 100 L 300 100" class="arrow" />
     
     <rect x="300" y="50" width="160" height="100" class="box box-bronze" />
-    <text x="380" y="100" class="text">BRONZE</text>
-    <text x="380" y="125" class="subtext">Immutable Ingestion</text>
+    <text x="380" y="100" class="text">VECTORIZE</text>
+    <text x="380" y="125" class="subtext">TF-IDF Extraction</text>
     
     <path d="M 460 100 L 550 100" class="arrow" />
     
     <rect x="550" y="50" width="160" height="100" class="box box-silver" />
-    <text x="630" y="100" class="text">SILVER</text>
-    <text x="630" y="125" class="subtext">Validation &amp; Cleanse</text>
+    <text x="630" y="100" class="text">MATCH</text>
+    <text x="630" y="125" class="subtext">Cosine Similarity</text>
     
     <path d="M 710 100 L 800 100" class="arrow" />
     
     <rect x="800" y="50" width="160" height="100" class="box box-gold" />
-    <text x="880" y="100" class="text">GOLD</text>
-    <text x="880" y="125" class="subtext">Clinical AI Engine</text>
+    <text x="880" y="100" class="text">RESOLVE</text>
+    <text x="880" y="125" class="subtext">Groq LLaMA 3.1</text>
     
     <!-- Animated Data Packet -->
     <circle cx="210" cy="100" r="8" class="data" />
