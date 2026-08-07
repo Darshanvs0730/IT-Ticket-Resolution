@@ -6,6 +6,10 @@
   <img src="assets/divider-animation.svg" alt="divider" width="100%">
 </p>
 
+<h3 align="center">
+  🌐 <b>Live Demo:</b> <a href="https://dvs-it-ticket-res.streamlit.app/">https://dvs-it-ticket-res.streamlit.app/</a>
+</h3>
+
 ## 📖 Project Status
 
 - **Version**: 1.0.0
