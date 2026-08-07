@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="150">
+    <style>
+        .icon { fill: #007acc; animation: float 3s ease-in-out infinite; }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .text { font: bold 16px -apple-system, sans-serif; fill: #333; text-anchor: middle; }
+    </style>
+    
+    <g transform="translate(150, 60)" class="icon" style="animation-delay: 0s;">
+        <circle cx="0" cy="0" r="30" fill="#e3f2fd" stroke="#007acc" stroke-width="2"/>
+        <text x="0" y="55" class="text">Python 3.10+</text>
+        <text x="0" y="5" font-size="20" text-anchor="middle" fill="#007acc">🐍</text>
+    </g>
+    
+    <g transform="translate(380, 60)" class="icon" style="animation-delay: 0.5s;">
+        <circle cx="0" cy="0" r="30" fill="#e3f2fd" stroke="#007acc" stroke-width="2"/>
+        <text x="0" y="55" class="text">Streamlit</text>
+        <text x="0" y="5" font-size="20" text-anchor="middle" fill="#007acc">📊</text>
+    </g>
+    
+    <g transform="translate(610, 60)" class="icon" style="animation-delay: 1s;">
+        <circle cx="0" cy="0" r="30" fill="#e3f2fd" stroke="#007acc" stroke-width="2"/>
+        <text x="0" y="55" class="text">Pandas</text>
+        <text x="0" y="5" font-size="20" text-anchor="middle" fill="#007acc">🐼</text>
+    </g>
+    
+    <g transform="translate(840, 60)" class="icon" style="animation-delay: 1.5s;">
+        <circle cx="0" cy="0" r="30" fill="#e3f2fd" stroke="#007acc" stroke-width="2"/>
+        <text x="0" y="55" class="text">Medallion Arch</text>
+        <text x="0" y="5" font-size="20" text-anchor="middle" fill="#007acc">🥇</text>
+    </g>
+</svg>

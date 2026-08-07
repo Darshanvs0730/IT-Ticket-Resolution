@@ -1,105 +1,129 @@
-# IT Ticket Resolution Engine
+<div align="center">
+  <img src="assets/header-animation.svg" alt="IT Ticket Resolution Engine" width="100%">
+</div>
 
-An AI-powered IT Ticket Resolution system designed to streamline technical support workflows. By utilizing a FastAPI backend and a beautiful Streamlit frontend, the system offers instant, intelligent resolution suggestions to IT tickets using Groq LLM (LLaMA 3) and TF-IDF similarity mapping against historical resolutions.
+<p align="center">
+  <img src="assets/divider-animation.svg" alt="divider" width="100%">
+</p>
 
----
+## 📖 Project Status
 
-## 🎯 Target Audience (Who is this for?)
-This system is highly useful for:
-- **IT Support Teams & Help Desks:** Automates repetitive ticket responses and dramatically reduces Mean Time to Resolution (MTTR).
-- **System Administrators:** Provides an easy way to manage historical knowledge bases and oversee the ticket queue.
-- **Employees / End-Users:** Empowers users with instant AI-driven solutions to common technical problems, potentially solving their issues before human intervention is even required.
-
-## ✨ Key Features
-- **Instant AI Resolutions:** Automatically suggests resolutions for newly created tickets by finding similar past issues (TF-IDF) and using LLM generation (LLaMA 3) to synthesize a tailored response.
-- **Role-Based Access Control (RBAC):** Seamlessly supports Standard Users (who create and view their own tickets) and Administrators (who can view analytics and manage the historical knowledge base).
-- **Interactive Analytics Dashboard:** Real-time visualizations of ticket statuses and categories using Plotly.
-- **Historical Knowledge Base (KB):** Administrators can manage a database of past resolutions which the AI uses to train its responses.
-- **Export Capabilities:** Easy CSV export functionality for historical records and active ticket queues.
-- **Clean, Modern UI:** A highly polished, responsive interface built with Streamlit and custom CSS styling.
-
-## 🚀 Advantages & Benefits
-- **Reduces Support Load:** Deflects common Level-1 support tickets by providing instant, accurate self-service solutions.
-- **Knowledge Retention:** Prevents "brain drain" by storing institutional knowledge in a queryable historical database.
-- **High Performance:** Built on FastAPI, the backend handles concurrent API requests with lightning-fast async operations.
-- **Scalable Architecture:** Clean separation of concerns between the backend API and frontend UI allows each to be scaled or replaced independently.
-
-## 🔄 App Flow & User Flow
-
-### 1. Standard User Flow
-1. **Authentication:** User signs up / logs in via JWT-secured endpoints.
-2. **Dashboard Overview:** User sees a high-level overview of their ticket statistics.
-3. **Ticket Creation:** User submits a new IT issue (Title, Category, Priority, Description).
-4. **AI Processing:** Upon submission, the engine cross-references the issue with the Historical Database. If a match is found, the AI generates a customized, immediate resolution.
-5. **Resolution Review:** User views the suggested AI resolution in their `My Tickets` portal.
-
-### 2. Administrator Flow
-1. **Admin Login:** Admin logs in using an authorized admin account (username: `admin`).
-2. **Knowledge Base Management:** Admin accesses the `Historical Tickets` portal to view the raw data feeding the AI engine.
-3. **System Analytics:** Admin accesses the `Analytics` portal to monitor organization-wide ticket metrics (volume by category, resolution times, etc.).
+- **Version**: 1.0.0
+- **Production Ready**: Yes
+- **Test Suite**: Passed (API & Endpoints)
+- **Architecture**: Client-Server (FastAPI + Streamlit)
+- **AI Engine**: Groq Llama 3.1 8B (Resolution Generation)
+- **NLP Matching**: Scikit-Learn (TF-IDF Cosine Similarity)
 
 ---
 
-## 🛠️ Tech Stack
+## 📖 Project Overview
 
-**Backend:**
-- **Python 3.10+** (Core Language)
-- **FastAPI** (High-performance API framework)
-- **SQLAlchemy** (ORM for database interactions)
-- **SQLite** (Lightweight database for portability)
-- **Scikit-Learn** (TF-IDF Vectorization & Cosine Similarity)
-- **Groq API / LLaMA 3.1 8B** (LLM for text generation)
-- **PyJWT & Passlib** (Authentication and password hashing)
-- **Uvicorn** (ASGI server)
+IT Ticket Resolution is an AI-powered, highly-deterministic technical support engine designed to ensure that enterprise IT issues are instantly resolved by cross-referencing incoming requests against a verified historical knowledge base.
 
-**Frontend:**
-- **Streamlit** (Rapid UI development)
-- **Pandas** (Data manipulation)
-- **Plotly** (Interactive charting)
-- **Requests** (HTTP client for API communication)
+Unlike generic LLM chatbots, this engine operates as a **RAG Comparison Engine**. It maps the semantic context of a new IT ticket (hardware, software, network, access) to the most mathematically similar historical ticket (using TF-IDF), and only then delegates the final resolution synthesis to a large language model (LLaMA 3).
 
 ---
 
-## 📂 Project Structure
+## 🎯 Problem Statement
 
-```
+Manual IT support is slow, subjective, and prone to repetitive bottlenecks. Level-1 support engineers suffer from immense cognitive load answering the same password reset and hardware failure tickets repeatedly. Simple Generative AI solutions suffer from hallucinations and lack context of internal company policies. The IT Ticket Resolution system solves this by strictly enforcing mathematically grounded comparisons to *actual past company tickets* before generating a resolution.
+
+---
+
+## 🚀 Pipeline
+
+<div align="center">
+  <img src="assets/pipeline-animation.svg" alt="Pipeline Animation" width="100%">
+</div>
+
+The deterministic resolution pipeline orchestrates an immutable sequence:
+1. **Ticket Ingestion**: Parses incoming ticket title, description, and category.
+2. **Vectorization**: Transforms the text into a TF-IDF vector representation.
+3. **Similarity Search**: Calculates cosine similarity against the SQLite Historical Database.
+4. **Context Injection**: Retrieves the highest-confidence matching historical resolution.
+5. **LLM Synthesis**: Groq LLaMA 3.1 8B generates a tailored, step-by-step resolution grounded purely in the historical context.
+6. **Canonical Reporting**: Outputs standard CSVs and visual Plotly analytics.
+
+---
+
+## 💻 Tech Stack
+
+<div align="center">
+  <img src="assets/tech-stack-animation.svg" alt="Tech Stack" width="100%">
+</div>
+
+- **Backend Framework**: Python 3.10+, FastAPI
+- **Frontend Framework**: Streamlit
+- **Embeddings / NLP**: `scikit-learn` (TF-IDF)
+- **LLM API**: Groq (Llama 3.1 8B)
+- **Database**: SQLite (SQLAlchemy ORM)
+- **Authentication**: PyJWT, bcrypt
+
+---
+
+## 📂 Folder Structure
+
+```text
 IT-Ticket-Resolution/
-├── backend/
+├── backend/                              # Core API and AI engines
 │   ├── app/
-│   │   ├── main.py        # FastAPI application entry point
-│   │   ├── database.py    # SQLite connections and ORM models
-│   │   ├── auth.py        # JWT authentication logic
-│   │   ├── ai_service.py  # Groq LLM integration and context management
-│   │   └── nlp.py         # TF-IDF similarity engine
-│   └── seed_db.py         # Script to seed synthetic historical tickets
-│
-├── frontend/
-│   ├── app.py             # Streamlit frontend entry point
-│   ├── pages/             # Streamlit application pages (Dashboard, etc.)
-│   └── utils/             # API client and UI components
-│
-├── database.py            # SQLite configuration (legacy root config)
-├── schema.sql             # Full DDL schema for the database
-└── tickets.db             # Local SQLite database file
+│   │   ├── main.py                       # FastAPI entrypoint
+│   │   ├── database.py                   # SQLite config
+│   │   ├── auth.py                       # JWT security
+│   │   ├── llm_engine.py                 # Groq LLaMA integration
+│   │   └── nlp_engine.py                 # TF-IDF matching
+│   ├── seed_db.py                        # Historical data seeder
+│   └── requirements.txt                  # Backend dependencies
+├── frontend/                             # Streamlit user interface
+│   ├── app.py                            # UI entrypoint
+│   ├── config.py                         # UI configuration
+│   ├── pages/                            # Auth, Dashboard, Tickets
+│   ├── utils/                            # API client and UI components
+│   └── requirements.txt                  # Frontend dependencies
+├── assets/                               # Animated SVGs & visual assets
+├── database.py                           # Legacy config
+├── schema.sql                            # DDL schema
+└── README.md                             # This file
 ```
 
 ---
 
-## ⚙️ Setup & Running Locally
+## 🛠 Installation
 
-Ensure you have Python installed. The project runs in two parts:
+### Prerequisites
+- Python 3.10+
+- Groq API Key
 
-### 1. Run the Backend
+### Local Setup
+```bash
+# Clone the repository
+git clone https://github.com/Darshanvs0730/IT-Ticket-Resolution.git
+cd IT-Ticket-Resolution
+
+# Set up Backend
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+# Add your GROQ_API_KEY to backend/.env
+```
+
+---
+
+## 🚀 Running Production
+
+You can boot the full stack locally.
+
+**Run the Backend API:**
 ```bash
 cd backend
 python -m uvicorn app.main:app --reload --port 8000
 ```
-*The backend API will be available at http://localhost:8000*
 
-### 2. Run the Frontend
-In a new terminal window:
+**Run the Frontend Dashboard:**
 ```bash
 cd frontend
 python -m streamlit run app.py
 ```
-*The Streamlit web interface will be available at http://localhost:8502*
